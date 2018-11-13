@@ -16,6 +16,7 @@ Matrix::Matrix(GRID *grid)
 	etaTab[3] = etaTab[2];
 
 	double matrixH2[4][4];
+	double matrixP[4];
 
 
 
@@ -435,7 +436,72 @@ Matrix::Matrix(GRID *grid)
 
 
 
-		////////////////////
+		//////////////////////////////////////////////////////////////////////////////////// Macierz P
+
+
+
+
+		sideLength[0] = sqrt(pow(grid->nodes[(int)grid->elements[i].ID[1]].x - grid->nodes[(int)grid->elements[i].ID[0]].x, 2) + pow(grid->nodes[(int)grid->elements[i].ID[1]].y - grid->nodes[(int)grid->elements[i].ID[0]].y, 2));
+		sideLength[1] = sqrt(pow(grid->nodes[(int)grid->elements[i].ID[2]].x - grid->nodes[(int)grid->elements[i].ID[1]].x, 2) + pow(grid->nodes[(int)grid->elements[i].ID[2]].y - grid->nodes[(int)grid->elements[i].ID[1]].y, 2));
+		sideLength[2] = sqrt(pow(grid->nodes[(int)grid->elements[i].ID[3]].x - grid->nodes[(int)grid->elements[i].ID[2]].x, 2) + pow(grid->nodes[(int)grid->elements[i].ID[3]].y - grid->nodes[(int)grid->elements[i].ID[2]].y, 2));
+		sideLength[3] = sqrt(pow(grid->nodes[(int)grid->elements[i].ID[3]].x - grid->nodes[(int)grid->elements[i].ID[0]].x, 2) + pow(grid->nodes[(int)grid->elements[i].ID[3]].y - grid->nodes[(int)grid->elements[i].ID[0]].y, 2));
+
+		detJ[0] = sideLength[0] / 2;
+		detJ[1] = sideLength[1] / 2;
+		detJ[2] = sideLength[2] / 2;
+		detJ[3] = sideLength[3] / 2;
+
+		double ppc1[4], ppc2[4], psum[4];
+
+		for (int j = 0;j < 4;j++)
+		{
+			
+				matrixP[j] = 0;
+		}
+
+
+		for (int e = 0;e < 4;e++) //4 powierzchnie
+		{
+			Nshape[0][0] = calculateN1(ksiPow[2 * e], etaPow[2 * e]);
+			Nshape[0][1] = calculateN2(ksiPow[2 * e], etaPow[2 * e]);
+			Nshape[0][2] = calculateN3(ksiPow[2 * e], etaPow[2 * e]);
+			Nshape[0][3] = calculateN4(ksiPow[2 * e], etaPow[2 * e]);
+
+			Nshape[1][0] = calculateN1(ksiPow[2 * e + 1], etaPow[2 * e + 1]);
+			Nshape[1][1] = calculateN2(ksiPow[2 * e + 1], etaPow[2 * e + 1]);
+			Nshape[1][2] = calculateN3(ksiPow[2 * e + 1], etaPow[2 * e + 1]);
+			Nshape[1][3] = calculateN4(ksiPow[2 * e + 1], etaPow[2 * e + 1]);
+
+			for (int j = 0;j < 4;j++)
+			{
+				
+					ppc1[j] = Nshape[0][j] * grid->elements[i].alfa*grid->elements[i].tempotocz;
+					ppc2[j] = Nshape[1][j] * grid->elements[i].alfa*grid->elements[i].tempotocz;
+					psum[j] = (ppc1[j] + ppc2[j])*detJ[e];
+		
+			}
+
+			if (grid->elements[i].edges[e].isBoundary())
+			{
+				for (int j = 0;j < 4;j++)
+				{
+						matrixP[j] += psum[j];
+				}
+			}
+
+		}
+		for (int j = 0;j < 4;j++)
+		{
+			
+				grid->elements[i].matrixP[j] = -matrixP[j];
+				cout << -matrixP[j] << " ";
+			cout << endl;
+		}
+		cout << endl;
+
+
+
+		/////////////////////////////////////////////////////////////////////////////////////// Koniec macierzy P
 	} //koniec pêtli po wszystkich elementach
 
 	

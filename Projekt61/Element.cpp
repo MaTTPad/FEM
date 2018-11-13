@@ -8,6 +8,7 @@ Element::Element()
 	ro = 7800;
 	c = 700;
 	alfa = 25;
+	tempotocz = 20;
 	for (int j = 0;j < 4;j++)
 	{
 		for (int k = 0;k < 4;k++)
