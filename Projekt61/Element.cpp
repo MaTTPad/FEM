@@ -4,11 +4,11 @@
 
 Element::Element()
 {
-	k = 30;
+	k = 25;
 	ro = 7800;
 	c = 700;
-	alfa = 25;
-	tempotocz = 20;
+	alfa = 300;
+	tempotocz = 1200;
 	for (int j = 0;j < 4;j++)
 	{
 		for (int k = 0;k < 4;k++)

@@ -14,8 +14,6 @@ int main()
 	Matrix xD(&grid);
 
 //	grid.showMatrixH();
-
-
 	int choice;
 	bool loop = true;
 	while (loop)
@@ -29,7 +27,13 @@ int main()
 		cout << "6. Wyswietl macierz H." << endl;
 		cout << "7. Wyswietl macierz C." << endl;
 		cout << "8. Wyswietl macierz H2." << endl;
-		cout << "9. Wyjdz." << endl;
+		cout << "9. Wyswietl sumarna lokalna macierz H." << endl;
+		cout << "10. Wyswietl globalna macierz H." << endl;
+		cout << "11. Wyswietl globalna macierz C." << endl;
+		cout << "12. Wyswietl macierz h z daszkiem." << endl;
+
+
+		cout << "13. Wyjdz." << endl;
 
 		cout << "Wybierz: ";
 		cin >> choice;
@@ -91,6 +95,31 @@ int main()
 		}
 
 		case 9:
+		{
+			grid.showMatrixHlokal();
+			break;
+		}
+
+		case 10:
+		{
+			grid.showGlobalMatrixH();
+			break;
+		}
+
+		case 11:
+		{
+			grid.showGlobalMatrixC();
+			break;
+		}
+
+		case 12:
+		{
+			grid.showMatrixHzDaszkiem();
+			break;
+		}
+
+
+		case 13:
 		{
 			loop = false;
 			break;
