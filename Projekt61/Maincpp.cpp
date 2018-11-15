@@ -31,9 +31,10 @@ int main()
 		cout << "10. Wyswietl globalna macierz H." << endl;
 		cout << "11. Wyswietl globalna macierz C." << endl;
 		cout << "12. Wyswietl macierz h z daszkiem." << endl;
+		cout << "13. Wyswietl macierz p z daszkiem." << endl;
 
 
-		cout << "13. Wyjdz." << endl;
+		cout << "14. Wyjdz." << endl;
 
 		cout << "Wybierz: ";
 		cin >> choice;
@@ -118,8 +119,13 @@ int main()
 			break;
 		}
 
-
 		case 13:
+		{
+			grid.showMatrixPzDaszkiem();
+			break;
+		}
+
+		case 14:
 		{
 			loop = false;
 			break;

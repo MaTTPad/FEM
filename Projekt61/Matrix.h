@@ -2,6 +2,7 @@
 #include "GRID.h"
 class Matrix
 {
+	GRID *myGrid;
 	double etaTab[4];
 	double ksiTab[4];
 	double Ntab[4][4];
@@ -45,5 +46,12 @@ public:
 	double calculateN2(double eta, double ksi);
 	double calculateN3(double eta, double ksi);
 	double calculateN4(double eta, double ksi);
+	void calculateGlobalMatrixH();
+	void calculateGlobalMatrixC();
+	void calculateMatrixHzDaszkiem();
+	void calculateGlobalMatrixP();
+	void calculateMatrixPzDaszkiem();
+
+
 };
 

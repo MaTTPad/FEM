@@ -4,6 +4,7 @@
 
 Matrix::Matrix(GRID *grid)
 {
+	myGrid = grid;
 	double elementsCount = (grid->nH - 1)*(grid->nL - 1);
 
 	ksiTab[0] = -1 / sqrt(3);
@@ -539,6 +540,11 @@ Matrix::Matrix(GRID *grid)
 	} //koniec pêtli po wszystkich elementach
 
 	
+	calculateGlobalMatrixC();
+	calculateGlobalMatrixH();
+	calculateMatrixHzDaszkiem();
+	calculateGlobalMatrixP();
+	calculateMatrixPzDaszkiem();
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
@@ -578,4 +584,151 @@ double Matrix::calculateN4(double ksi, double eta)
 
 Matrix::Matrix()
 {
+}
+
+
+
+
+void Matrix::calculateGlobalMatrixH()
+{
+	cout << "Klasa matrix, obliczam macierz H globalna" << endl;
+	for (int i = 0;i < (myGrid->nH- 1)*(myGrid->nL - 1);i++)
+	{
+		for (int j = 0;j < 4;j++)
+			for (int k = 0;k < 4;k++) {
+				int index1 = myGrid->elements[i].ID[j];
+				int index2 = myGrid->elements[i].ID[k];
+
+				myGrid->globalMatrixH[index1][index2] += myGrid->elements[i].matrixH[j][k];
+			}
+	}
+}
+
+void Matrix::calculateGlobalMatrixC()
+{
+	cout << "Klasa matrix, obliczam macierz C globalna" << endl;
+
+	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
+	{
+		for (int j = 0;j < 4;j++)
+			for (int k = 0;k < 4;k++) {
+				int index1 = myGrid->elements[i].ID[j];
+				int index2 = myGrid->elements[i].ID[k];
+
+				myGrid->globalMatrixC[index1][index2] += myGrid->elements[i].matrixC[j][k];
+			}
+	}
+}
+
+void Matrix::calculateMatrixHzDaszkiem()
+{
+	cout << "Klasa matrix, obliczam macierz H z daszkiem" << endl;
+
+	//double dtau = 50;
+	double **noweC = new double*[myGrid->nH*myGrid->nL];
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+		noweC[i] = new double[myGrid->nH*myGrid->nL];
+
+	for (int i = 0;i<myGrid->nH*myGrid->nL;i++)
+		for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
+		{
+			noweC[i][j] = myGrid->globalMatrixC[i][j] / myGrid->elements[0].dtau;
+		}
+
+	for (int i = 0;i < (myGrid->nH)*(myGrid->nL);i++)
+	{
+		for (int j = 0;j < (myGrid->nH)*(myGrid->nL);j++)
+		{
+			myGrid->MatrixHzDaszkiem[i][j] = myGrid->globalMatrixH[i][j] + noweC[i][j];
+		}
+	}
+}
+
+void Matrix::calculateGlobalMatrixP()
+{
+	cout << "Klasa matrix, obliczam macierz P globalna" << endl; //chyba coœ z globaln¹ zjebane DX
+	
+	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
+	{
+			for (int k = 0;k < 4;k++) {
+				int index1 = myGrid->elements[i].ID[k];
+				myGrid->globalMatrixP[index1] += myGrid->elements[i].matrixP[k];
+			}
+	}
+}
+
+void Matrix::calculateMatrixPzDaszkiem()
+{
+	cout << "Klasa matrix, obliczam macierz P z daszkiem" << endl;
+
+	double **noweC = new double*[myGrid->nH*myGrid->nL];
+	double *noweC2 = new double[myGrid->nH*myGrid->nL];
+
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+	{
+		noweC2[i] = 0;
+		noweC[i] = new double[myGrid->nH*myGrid->nL];
+	}
+	for (int i = 0;i<myGrid->nH*myGrid->nL;i++)
+		for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
+		{
+			noweC[i][j] = myGrid->globalMatrixC[i][j] / myGrid->elements[0].dtau;
+		}
+	/*
+	cout << "Nowa macierz C:" << endl; //ok
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++) {
+		for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
+		{
+			cout << noweC[i][j] << " ";
+		}
+		cout << endl;
+	}*/
+	///teraz pomno¿yæ * {t0}
+
+	///zrobiæ wektor z temp w ka¿dym wêŸle, bêdzie proœciej ;)
+
+	double *nodesTemp=new double[myGrid->nH*myGrid->nL];
+
+	int counter = 0;
+	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
+	{
+		for (int j = 0;j < 4;j++)
+		{
+			nodesTemp[counter] = myGrid->nodes[(myGrid->elements[i].ID[j])].t;
+			counter++;
+		}
+	}
+
+	/*cout << "Temperatury w wezlach:" << endl;
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+	{
+		cout << "Temp w wezle nr " <<i<<": "<< nodesTemp[i] << endl; //SZTOS
+	}
+	*/
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+	{
+		for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
+		{
+			noweC2[i] += (noweC[i][j] * nodesTemp[j]);
+		}
+	}
+/*
+	cout << "NOWE C2:" << endl;
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+	{
+		cout << noweC2[i] << " ";
+	}
+	cout << endl;
+	///////////////////////////////////////////////////////
+
+	*/
+	//cout << "Globalna p" << endl;
+
+	for (int i = 0;i < (myGrid->nH)*(myGrid->nL);i++)
+	{
+		//cout << myGrid->globalMatrixP[i] << " ";
+		myGrid->MatrixPzDaszkiem[i] = noweC2[i] - myGrid->globalMatrixP[i]; //albo +=
+		
+	}
+	//cout << endl;
 }

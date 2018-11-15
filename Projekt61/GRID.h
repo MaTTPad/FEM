@@ -21,6 +21,8 @@ public:
 	double **globalMatrixH;
 	double **globalMatrixC;
 	double **MatrixHzDaszkiem;
+	double *globalMatrixP;
+	double *MatrixPzDaszkiem;
 
 
 
@@ -43,6 +45,7 @@ public:
 	void showGlobalMatrixC();
 	void calculateMatrixHzDaszkiem();
 	void showMatrixHzDaszkiem();
+	void showMatrixPzDaszkiem();
 
 };
 

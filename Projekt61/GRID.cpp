@@ -21,13 +21,16 @@ GRID::GRID()
 		globalMatrixH = new double*[nodesCount];
 		globalMatrixC = new double*[nodesCount];
 		MatrixHzDaszkiem = new double*[nodesCount];
-
+		globalMatrixP = new double[nodesCount];
+		MatrixPzDaszkiem = new double[nodesCount];
 		for (int i = 0;i < nodesCount;i++)
 		{
 			globalMatrixH[i] = new double[nodesCount];
 			globalMatrixC[i] = new double[nodesCount];
 			MatrixHzDaszkiem[i] = new double[nodesCount];
 
+			globalMatrixP[i] = 0;
+			MatrixPzDaszkiem[i] = 0;
 		}
 
 		for (int i = 0;i < nodesCount;i++)
@@ -340,7 +343,7 @@ void GRID::calculateMatrixHzDaszkiem()
 void GRID:: showGlobalMatrixH()
 {
 
-		calculateGlobalMatrixH();
+		//calculateGlobalMatrixH();
 		cout << "Macierz globalna H:" << endl;
 		for (int k = 0;k < nH*nL;k++) {
 			for (int j = 0;j < nH*nL;j++)
@@ -354,7 +357,7 @@ void GRID:: showGlobalMatrixH()
 void GRID::showGlobalMatrixC()
 {
 
-	calculateGlobalMatrixC();
+	//calculateGlobalMatrixC();
 	cout << "Macierz globalna C:" << endl;
 	for (int k = 0;k < nH*nL;k++) {
 		for (int j = 0;j < nH*nL;j++)
@@ -368,13 +371,23 @@ void GRID::showGlobalMatrixC()
 void GRID::showMatrixHzDaszkiem()
 {
 
-	calculateMatrixHzDaszkiem();
+	//calculateMatrixHzDaszkiem();
 	cout << "Macierz h z daszkiem:" << endl;
 	for (int k = 0;k < nH*nL;k++) {
 		for (int j = 0;j < nH*nL;j++)
 		{
 			cout << MatrixHzDaszkiem[k][j] << " ";
 		}
+		cout << endl;
+	}
+}
+
+void GRID::showMatrixPzDaszkiem()
+{
+
+	cout << "Macierz p z daszkiem:" << endl;
+	for (int k = 0;k < nH*nL;k++) {
+		cout << MatrixPzDaszkiem[k] << " ";
 		cout << endl;
 	}
 }
