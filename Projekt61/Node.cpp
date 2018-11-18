@@ -4,7 +4,11 @@
 
 Node::Node()
 {
-	t = 100;
+}
+
+Node::Node(int initialTemp)
+{
+	t = initialTemp;
 }
 
 

@@ -1,9 +1,10 @@
 ﻿  Matrix.cpp
-c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(628): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
-c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(630): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
-c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(664): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
-c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(665): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
-c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(670): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
-c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(690): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(566): warning C4244: "=": konwersja z "double" do "int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(692): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(694): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(728): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(729): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(734): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
+c:\users\bruger\documents\visual studio 2017\projects\projekt61\projekt61\matrix.cpp(754): warning C4244: "inicjowanie": konwersja z "double" do "unsigned int", możliwa utrata danych
   Projekt61.vcxproj -> C:\Users\Bruger\documents\visual studio 2017\Projects\Projekt61\Debug\Projekt61.exe
   Projekt61.vcxproj -> C:\Users\Bruger\documents\visual studio 2017\Projects\Projekt61\Debug\Projekt61.pdb (Partial PDB)

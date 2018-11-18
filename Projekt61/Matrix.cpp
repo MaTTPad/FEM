@@ -1,6 +1,8 @@
 #include "Matrix.h"
 #include "GRID.H"
 
+const double eps = 1e-12; // sta³a przybli¿enia zera
+bool gauss(int n, double ** AB, double * X);
 
 Matrix::Matrix(GRID *grid)
 {
@@ -326,15 +328,15 @@ Matrix::Matrix(GRID *grid)
 		}
 
 		/*
-			cout << "Macierz C" << endl;
-			for (int j = 0;j < 4;j++)
-			{
-				for (int k = 0;k < 4;k++)
-				{
-					cout<<grid->elements[i].matrixC[j][k]<< " ";
-				}
-				cout << endl;
-			}
+		cout << "Macierz C" << endl;
+		for (int j = 0;j < 4;j++)
+		{
+		for (int k = 0;k < 4;k++)
+		{
+		cout<<grid->elements[i].matrixC[j][k]<< " ";
+		}
+		cout << endl;
+		}
 		*/
 
 		/////////////////////////////////////////////////////////// druga czêœæ macierzy H
@@ -385,7 +387,7 @@ Matrix::Matrix(GRID *grid)
 		}
 		for (int e = 0;e < 4;e++) //4 powierzchnie
 		{
-			Nshape[0][0] = calculateN1(ksiPow[2*e], etaPow[2 * e]);
+			Nshape[0][0] = calculateN1(ksiPow[2 * e], etaPow[2 * e]);
 			Nshape[0][1] = calculateN2(ksiPow[2 * e], etaPow[2 * e]);
 			Nshape[0][2] = calculateN3(ksiPow[2 * e], etaPow[2 * e]);
 			Nshape[0][3] = calculateN4(ksiPow[2 * e], etaPow[2 * e]);
@@ -401,31 +403,31 @@ Matrix::Matrix(GRID *grid)
 				{
 					pc1[j][k] = Nshape[0][j] * Nshape[0][k] * grid->elements[i].alfa;
 					pc2[j][k] = Nshape[1][j] * Nshape[1][k] * grid->elements[i].alfa;
-					sum[j][k] = (pc1[j][k]+pc2[j][k])*detJ[e];
+					sum[j][k] = (pc1[j][k] + pc2[j][k])*detJ[e];
 					//cout << sum[j][k] << " ";
 				}
 				//cout << endl;
 			}
 			//cout << endl;
-		
+
 			if (grid->elements[i].edges[e].isBoundary())
 			{
 				for (int j = 0;j < 4;j++)
 				{
-					for (int k = 0;k < 4;k++) 
+					for (int k = 0;k < 4;k++)
 					{
 						matrixH2[j][k] += sum[j][k];
 					}
 				}
 			}
-		
+
 		}
 		for (int j = 0;j < 4;j++)
 		{
 			for (int k = 0;k < 4;k++)
 			{
 				grid->elements[i].H2[j][k] = matrixH2[j][k];
-			//	cout << matrixH2[j][k] << " ";
+				//	cout << matrixH2[j][k] << " ";
 			}
 			//cout << endl;
 		}
@@ -474,8 +476,8 @@ Matrix::Matrix(GRID *grid)
 
 		for (int j = 0;j < 4;j++)
 		{
-			
-				matrixP[j] = 0;
+
+			matrixP[j] = 0;
 		}
 
 
@@ -493,27 +495,27 @@ Matrix::Matrix(GRID *grid)
 
 			for (int j = 0;j < 4;j++)
 			{
-				
-					ppc1[j] = Nshape[0][j] * grid->elements[i].alfa*grid->elements[i].tempotocz;
-					ppc2[j] = Nshape[1][j] * grid->elements[i].alfa*grid->elements[i].tempotocz;
-					psum[j] = (ppc1[j] + ppc2[j])*detJ[e];
-		
+
+				ppc1[j] = Nshape[0][j] * grid->elements[i].alfa*grid->elements[i].tempotocz;
+				ppc2[j] = Nshape[1][j] * grid->elements[i].alfa*grid->elements[i].tempotocz;
+				psum[j] = (ppc1[j] + ppc2[j])*detJ[e];
+
 			}
 
 			if (grid->elements[i].edges[e].isBoundary())
 			{
 				for (int j = 0;j < 4;j++)
 				{
-						matrixP[j] += psum[j];
+					matrixP[j] += psum[j];
 				}
 			}
 
 		}
 		for (int j = 0;j < 4;j++)
 		{
-			
-				grid->elements[i].matrixP[j] = -matrixP[j];
-				cout << -matrixP[j] << " ";
+
+			grid->elements[i].matrixP[j] = -matrixP[j];
+			cout << -matrixP[j] << " ";
 			cout << endl;
 		}
 		cout << endl;
@@ -525,13 +527,13 @@ Matrix::Matrix(GRID *grid)
 
 		////////////////////////////////////////////////////////////////////////////////////// £¹czenie macierzy w macierz globaln¹ H
 
-	/////	for (int j = 0;j < 4;j++)
-	//		for (int k = 0;k < 4;k++)
-	///			grid->globalMatrixH[(int)grid->elements[i].ID[j], (int)grid->elements[i].ID[k]]= grid->elements[i].matrixH[j][k];
+		/////	for (int j = 0;j < 4;j++)
+		//		for (int k = 0;k < 4;k++)
+		///			grid->globalMatrixH[(int)grid->elements[i].ID[j], (int)grid->elements[i].ID[k]]= grid->elements[i].matrixH[j][k];
 
 
 
-				////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -539,13 +541,75 @@ Matrix::Matrix(GRID *grid)
 
 	} //koniec pêtli po wszystkich elementach
 
-	
-	calculateGlobalMatrixC();
-	calculateGlobalMatrixH();
-	calculateMatrixHzDaszkiem();
-	calculateGlobalMatrixP();
-	calculateMatrixPzDaszkiem();
+	cout << "Simulation time" << endl;
+	int simulationTime = 500;
+	//cin >> simulationTime;
+	int detau = 50;
 
+	for (int lkrokow = 0;lkrokow<(simulationTime / detau);lkrokow++)
+	{
+		cout << "Iteracja nr " << lkrokow << endl;
+		zerujMacierze();
+
+		calculateGlobalMatrixC();
+		calculateGlobalMatrixH();
+		calculateMatrixHzDaszkiem();
+		calculateGlobalMatrixP();
+		calculateMatrixPzDaszkiem();
+
+
+		double **AB, *X;
+		int      n, i, j;
+
+		// odczytujemy liczbê niewiadomych
+
+		n = myGrid->nH*myGrid->nL;
+
+		// tworzymy macierze AB i X
+
+		AB = new double *[n];
+		X = new double[n];
+
+		for (i = 0; i < n; i++) AB[i] = new double[n + 1];
+
+		// odczytujemy dane dla macierzy AB
+
+		for (i = 0; i < n; i++) {
+			for (j = 0; j < n; j++)
+			{
+				AB[i][j] = myGrid->MatrixHzDaszkiem[i][j];
+			}
+			AB[i][j] = myGrid->MatrixPzDaszkiem[i];
+		}
+		if (gauss(n, AB, X))
+		{
+			for (i = 0; i < n; i++)
+				cout << "t" << i + 1 << " = " << X[i]
+				<< endl;
+		}
+		else
+			cout << "DZIELNIK ZERO\n";
+
+		for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+		{
+			myGrid->nodes[i].t = X[i];
+		}
+
+		/*
+		cout << "Przypisane wartosci temp: " << endl;
+		for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+		{
+			cout << myGrid->nodes[i].t << endl;
+		}*/
+
+
+		// usuwamy macierze z pamiêci
+
+		for (i = 0; i < n; i++) delete[] AB[i];
+		delete[] AB;
+		delete[] X;
+
+	}
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
@@ -592,7 +656,7 @@ Matrix::Matrix()
 void Matrix::calculateGlobalMatrixH()
 {
 	cout << "Klasa matrix, obliczam macierz H globalna" << endl;
-	for (int i = 0;i < (myGrid->nH- 1)*(myGrid->nL - 1);i++)
+	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
 	{
 		for (int j = 0;j < 4;j++)
 			for (int k = 0;k < 4;k++) {
@@ -647,13 +711,13 @@ void Matrix::calculateMatrixHzDaszkiem()
 void Matrix::calculateGlobalMatrixP()
 {
 	cout << "Klasa matrix, obliczam macierz P globalna" << endl; //chyba coœ z globaln¹ zjebane DX
-	
+
 	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
 	{
-			for (int k = 0;k < 4;k++) {
-				int index1 = myGrid->elements[i].ID[k];
-				myGrid->globalMatrixP[index1] += myGrid->elements[i].matrixP[k];
-			}
+		for (int k = 0;k < 4;k++) {
+			int index1 = myGrid->elements[i].ID[k];
+			myGrid->globalMatrixP[index1] += myGrid->elements[i].matrixP[k];
+		}
 	}
 }
 
@@ -677,32 +741,34 @@ void Matrix::calculateMatrixPzDaszkiem()
 	/*
 	cout << "Nowa macierz C:" << endl; //ok
 	for (int i = 0;i < myGrid->nH*myGrid->nL;i++) {
-		for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
-		{
-			cout << noweC[i][j] << " ";
-		}
-		cout << endl;
+	for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
+	{
+	cout << noweC[i][j] << " ";
+	}
+	cout << endl;
 	}*/
 	///teraz pomno¿yæ * {t0}
 
 	///zrobiæ wektor z temp w ka¿dym wêŸle, bêdzie proœciej ;)
 
-	double *nodesTemp=new double[myGrid->nH*myGrid->nL];
+	double *nodesTemp = new double[myGrid->nH*myGrid->nL];
 
 	int counter = 0;
-	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
+	for (int i = 0;i < (myGrid->nH)*(myGrid->nL);i++)
 	{
-		for (int j = 0;j < 4;j++)
+		/*(for (int j = 0;j < 4;j++)
 		{
-			nodesTemp[counter] = myGrid->nodes[(myGrid->elements[i].ID[j])].t;
+			//nodesTemp[counter] = myGrid->nodes[(myGrid->elements[i].ID[j])].t;
 			counter++;
-		}
+		}*/
+		nodesTemp[i] = myGrid->nodes[i].t;
+		
 	}
 
 	/*cout << "Temperatury w wezlach:" << endl;
 	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
 	{
-		cout << "Temp w wezle nr " <<i<<": "<< nodesTemp[i] << endl; //SZTOS
+	cout << "Temp w wezle nr " <<i<<": "<< nodesTemp[i] << endl; //SZTOS
 	}
 	*/
 	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
@@ -712,11 +778,11 @@ void Matrix::calculateMatrixPzDaszkiem()
 			noweC2[i] += (noweC[i][j] * nodesTemp[j]);
 		}
 	}
-/*
+	/*
 	cout << "NOWE C2:" << endl;
 	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
 	{
-		cout << noweC2[i] << " ";
+	cout << noweC2[i] << " ";
 	}
 	cout << endl;
 	///////////////////////////////////////////////////////
@@ -728,7 +794,63 @@ void Matrix::calculateMatrixPzDaszkiem()
 	{
 		//cout << myGrid->globalMatrixP[i] << " ";
 		myGrid->MatrixPzDaszkiem[i] = noweC2[i] - myGrid->globalMatrixP[i]; //albo +=
-		
+
 	}
 	//cout << endl;
+
+
+
+
+
+
+
+
+}
+
+
+bool gauss(int n, double ** AB, double * X)
+{
+
+	int i, j, k;
+	double m, s;
+
+	// eliminacja wspó³czynników
+
+	for (i = 0; i < n - 1; i++)
+	{
+		for (j = i + 1; j < n; j++)
+		{
+			if (fabs(AB[i][i]) < eps) return false;
+			m = -AB[j][i] / AB[i][i];
+			for (k = i + 1; k <= n; k++)
+				AB[j][k] += m * AB[i][k];
+		}
+	}
+
+	// wyliczanie niewiadomych
+
+	for (i = n - 1; i >= 0; i--)
+	{
+		s = AB[i][n];
+		for (j = n - 1; j >= i + 1; j--)
+			s -= AB[i][j] * X[j];
+		if (fabs(AB[i][i]) < eps) return false;
+		X[i] = s / AB[i][i];
+	}
+	return true;
+}
+
+
+void Matrix::zerujMacierze()
+{
+	for (int i = 0;i < myGrid->nH*myGrid->nL;i++)
+	{
+		for (int j = 0;j < myGrid->nH*myGrid->nL;j++)
+		{
+			myGrid->globalMatrixH[i][j] = 0;
+			myGrid->globalMatrixC[i][j] = 0;
+
+		}
+		myGrid->globalMatrixP[i] = 0;
+	}
 }

@@ -11,7 +11,7 @@ using namespace std;
 class GRID
 {
 public:
-	double H, L, nH, nL;
+	double H, L, nH, nL, initialTemp, simulationTime, simulationStepTime, ambientTemp, alfa, specificHeat, conductivity, density;
 	Node *nodes;
 	Element *elements;
 

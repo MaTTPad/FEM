@@ -14,6 +14,16 @@ GRID::GRID()
 			plik >> nH; // liczba wêz³ów po wysokoœci
 			plik >> nL; // liczba wêz³ów po d³ugoœci
 		
+			initialTemp = 100;
+			simulationTime = 100;
+			simulationStepTime = 1;
+			ambientTemp = 1200;
+			alfa = 300; 
+			specificHeat = 700;
+			conductivity = 25;
+			density=7800;
+
+
 
 		int nodesCount = nH*nL;
 		int elementsCount = (nH - 1)*(nL - 1);
@@ -75,6 +85,7 @@ GRID::GRID()
 		int licznik = 0;
 		for (int k = 0;k < nodesCount;k++)
 		{
+			nodes[k].t = initialTemp;
 			nodes[k].x = x;
 			nodes[k].y = y;
 			if (x == 0 || x == L || y == 0 || y == H) {

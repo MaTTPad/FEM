@@ -51,7 +51,7 @@ public:
 	void calculateMatrixHzDaszkiem();
 	void calculateGlobalMatrixP();
 	void calculateMatrixPzDaszkiem();
-
-
+	void zerujMacierze();
+	void calculateLocalMatrixP();
 };
 

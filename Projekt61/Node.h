@@ -8,6 +8,7 @@ public:
 public:
 	bool isBoundary();
 	Node();
+	Node(int);
 	~Node();
 };
 
