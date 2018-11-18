@@ -542,9 +542,9 @@ Matrix::Matrix(GRID *grid)
 	} //koniec pêtli po wszystkich elementach
 
 	cout << "Simulation time" << endl;
-	int simulationTime = 500;
+	int simulationTime = myGrid->simulationTime;
 	//cin >> simulationTime;
-	int detau = 50;
+	int detau = myGrid->simulationStepTime;
 
 	for (int lkrokow = 0;lkrokow<(simulationTime / detau);lkrokow++)
 	{

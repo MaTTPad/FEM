@@ -15,8 +15,8 @@ GRID::GRID()
 			plik >> nL; // liczba wêz³ów po d³ugoœci
 		
 			initialTemp = 100;
-			simulationTime = 100;
-			simulationStepTime = 1;
+			simulationTime = 500;
+			simulationStepTime = 50;
 			ambientTemp = 1200;
 			alfa = 300; 
 			specificHeat = 700;
@@ -117,6 +117,14 @@ GRID::GRID()
 		licznik = 0;
 		for (int k = 0;k < elementsCount;k++)
 		{
+
+			elements[k].tempotocz = ambientTemp;
+			elements[k].k = conductivity;
+			elements[k].alfa = this->alfa;
+			elements[k].ro = density;
+			elements[k].c = specificHeat;
+			elements[k].dtau = simulationStepTime;
+
 			elements[k].ID[0] = val;
 			elements[k].ID[1] = val + nH;
 			elements[k].ID[2] = val + nH + 1;
