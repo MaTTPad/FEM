@@ -1,5 +1,5 @@
 #include "GRID.h"
-
+#include <math.h>
 
 GRID::GRID()
 {
@@ -22,7 +22,6 @@ GRID::GRID()
 			specificHeat = 700;
 			conductivity = 25;
 			density=7800;
-
 
 
 		int nodesCount = nH*nL;
@@ -82,27 +81,49 @@ GRID::GRID()
 
 
 		/////////////////////////////////////////////////////////////uzupe³nianie wspó³rzêdnych wêz³ów
-		int licznik = 0;
+		int liczniky = 0;
+		int licznikx = 0;
 		for (int k = 0;k < nodesCount;k++)
 		{
+			if (y >H)
+				y = H;
+			if(x>L)
+				x = L;
+			if (liczniky == (nH - 1))
+				y = H;
+			if (licznikx == (nL - 1))
+				x = L;
+
+
 			nodes[k].t = initialTemp;
 			nodes[k].x = x;
 			nodes[k].y = y;
-			if (x == 0 || x == L || y == 0 || y == H) {
-				nodes[k].boundary=true;
-			}
-			else
-				nodes[k].boundary = false;
-			y += (H / (nH - 1));
-			licznik++;
 
-			if (licznik >= nH)
+
+			if ((x == 0) || (x == L) || (y == 0) || (y == H))
+			{
+				nodes[k].boundary = true;
+			}
+
+			else
+			{	
+				nodes[k].boundary = false;
+			}
+
+			y += (H / (nH - 1));
+			liczniky++;
+
+			if (liczniky >= nH)
 			{
 				y = 0;
 				x += (L / (nL - 1));
-				licznik = 0;
+				liczniky = 0;
+				licznikx++;
 			}
 
+
+			//cout << "Node " << k << " boundary? " << nodes[k].boundary << endl;
+			//system("Pause");
 		}
 
 
@@ -114,7 +135,7 @@ GRID::GRID()
 		///////////////////////////////////////////////////////////////////////////// wêz³y nale¿¹ce do elementu
 
 		double val = 0;
-		licznik = 0;
+int		licznik = 0;
 		for (int k = 0;k < elementsCount;k++)
 		{
 
@@ -338,7 +359,7 @@ void GRID::calculateGlobalMatrixC()
 
 void GRID::calculateMatrixHzDaszkiem()
 {
-	double dtau = 50;
+	//double dtau = 50;
 	double **noweC = new double*[nH*nL];
 	for (int i = 0;i < nH*nL;i++)
 		noweC[i] = new double[nH*nL];
@@ -346,7 +367,7 @@ void GRID::calculateMatrixHzDaszkiem()
 	for(int i=0;i<nH*nL;i++)
 		for (int j = 0;j < nH*nL;j++)
 		{
-			noweC[i][j] = globalMatrixC[i][j] / dtau;
+			noweC[i][j] = globalMatrixC[i][j] / simulationStepTime;
 		}
 
 	for (int i = 0;i < (nH)*(nL);i++)

@@ -53,5 +53,8 @@ public:
 	void calculateMatrixPzDaszkiem();
 	void zerujMacierze();
 	void calculateLocalMatrixP();
+	double findMin(double *, int);
+	double findMax(double *, int);
+
 };
 

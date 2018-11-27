@@ -412,11 +412,14 @@ Matrix::Matrix(GRID *grid)
 
 			if (grid->elements[i].edges[e].isBoundary())
 			{
+				//cout << "element nr " << i << ", edge " << e<< "is boundary"<< endl;
+				//system("Pause");
 				for (int j = 0;j < 4;j++)
 				{
 					for (int k = 0;k < 4;k++)
 					{
 						matrixH2[j][k] += sum[j][k];
+						
 					}
 				}
 			}
@@ -427,12 +430,11 @@ Matrix::Matrix(GRID *grid)
 			for (int k = 0;k < 4;k++)
 			{
 				grid->elements[i].H2[j][k] = matrixH2[j][k];
-				//	cout << matrixH2[j][k] << " ";
+		//			cout << matrixH2[j][k] << " ";
 			}
-			//cout << endl;
+	//		cout << endl;
 		}
-		//cout << endl;
-
+//		cout << endl;
 
 		/////////////////////////////////////////////////////////////////////////////////////////koniec macierzy H2
 
@@ -515,10 +517,10 @@ Matrix::Matrix(GRID *grid)
 		{
 
 			grid->elements[i].matrixP[j] = -matrixP[j];
-			cout << -matrixP[j] << " ";
-			cout << endl;
+		//	cout << -matrixP[j] << " ";
+			//cout << endl;
 		}
-		cout << endl;
+		//cout << endl;
 
 
 
@@ -548,7 +550,7 @@ Matrix::Matrix(GRID *grid)
 
 	for (int lkrokow = 0;lkrokow<(simulationTime / detau);lkrokow++)
 	{
-		cout << "Iteracja nr " << lkrokow << endl;
+		cout << "After " << myGrid->simulationStepTime+myGrid->simulationStepTime*lkrokow<<" s: " << endl;
 		zerujMacierze();
 
 		calculateGlobalMatrixC();
@@ -583,9 +585,16 @@ Matrix::Matrix(GRID *grid)
 		}
 		if (gauss(n, AB, X))
 		{
-			for (i = 0; i < n; i++)
-				cout << "t" << i + 1 << " = " << X[i]
-				<< endl;
+			//for (i = 0; i < n; i++)
+				//cout << "t" << i + 1 << " = " << X[i]<< endl;
+				
+			double min = findMin(X, n);
+			double max = findMax(X, n);
+
+			cout << "Max temp: " << max << endl;
+			cout << "Min temp: " << min << endl;
+
+
 		}
 		else
 			cout << "DZIELNIK ZERO\n";
@@ -594,6 +603,10 @@ Matrix::Matrix(GRID *grid)
 		{
 			myGrid->nodes[i].t = X[i];
 		}
+
+
+
+
 
 		/*
 		cout << "Przypisane wartosci temp: " << endl;
@@ -613,6 +626,32 @@ Matrix::Matrix(GRID *grid)
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
+
+double Matrix::findMax(double *tab, int n)
+{
+	double max = tab[0];
+
+	for (int i = 0;i < n;i++)
+	{
+		if (tab[i] > max)
+			max = tab[i];
+	}
+
+	return max;
+}
+
+double Matrix::findMin(double *tab, int n)
+{
+	double min = tab[0];
+
+	for (int i = 0;i < n;i++)
+	{
+		if (tab[i] < min)
+			min = tab[i];
+	}
+
+	return min;
+}
 
 
 Matrix::~Matrix()
@@ -655,7 +694,7 @@ Matrix::Matrix()
 
 void Matrix::calculateGlobalMatrixH()
 {
-	cout << "Klasa matrix, obliczam macierz H globalna" << endl;
+	//cout << "Klasa matrix, obliczam macierz H globalna" << endl;
 	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
 	{
 		for (int j = 0;j < 4;j++)
@@ -670,7 +709,7 @@ void Matrix::calculateGlobalMatrixH()
 
 void Matrix::calculateGlobalMatrixC()
 {
-	cout << "Klasa matrix, obliczam macierz C globalna" << endl;
+	//cout << "Klasa matrix, obliczam macierz C globalna" << endl;
 
 	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
 	{
@@ -686,7 +725,7 @@ void Matrix::calculateGlobalMatrixC()
 
 void Matrix::calculateMatrixHzDaszkiem()
 {
-	cout << "Klasa matrix, obliczam macierz H z daszkiem" << endl;
+	//cout << "Klasa matrix, obliczam macierz H z daszkiem" << endl;
 
 	//double dtau = 50;
 	double **noweC = new double*[myGrid->nH*myGrid->nL];
@@ -710,7 +749,7 @@ void Matrix::calculateMatrixHzDaszkiem()
 
 void Matrix::calculateGlobalMatrixP()
 {
-	cout << "Klasa matrix, obliczam macierz P globalna" << endl; //chyba coœ z globaln¹ zjebane DX
+	//cout << "Klasa matrix, obliczam macierz P globalna" << endl; //chyba coœ z globaln¹ zjebane DX
 
 	for (int i = 0;i < (myGrid->nH - 1)*(myGrid->nL - 1);i++)
 	{
@@ -723,7 +762,7 @@ void Matrix::calculateGlobalMatrixP()
 
 void Matrix::calculateMatrixPzDaszkiem()
 {
-	cout << "Klasa matrix, obliczam macierz P z daszkiem" << endl;
+	//cout << "Klasa matrix, obliczam macierz P z daszkiem" << endl;
 
 	double **noweC = new double*[myGrid->nH*myGrid->nL];
 	double *noweC2 = new double[myGrid->nH*myGrid->nL];
