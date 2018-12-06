@@ -5,7 +5,10 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <math.h>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
 using namespace std;
 
 class GRID

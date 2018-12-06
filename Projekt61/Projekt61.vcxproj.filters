@@ -56,4 +56,9 @@
       <Filter>Pliki zasobów</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MES.json">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+  </ItemGroup>
 </Project>

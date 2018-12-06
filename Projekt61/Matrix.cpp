@@ -591,6 +591,7 @@ Matrix::Matrix(GRID *grid)
 			double min = findMin(X, n);
 			double max = findMax(X, n);
 
+
 			cout << "Max temp: " << max << endl;
 			cout << "Min temp: " << min << endl;
 

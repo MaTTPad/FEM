@@ -1,5 +1,4 @@
 #include "GRID.h"
-#include <math.h>
 
 GRID::GRID()
 {
@@ -9,20 +8,36 @@ GRID::GRID()
 
 	if (plik.good())
 	{
-			plik >> H; // wysokoœæ
+		ifstream ifs("MES.json");
+		json data = json::parse(ifs);
+
+		H = data["H"];
+		L = data["L"];
+		nH = data["nH"];
+		nL = data["nL"];
+		initialTemp = data["initialTemp"];
+		simulationTime = data["simulationTime"];
+		simulationStepTime = data["simulationStepTime"];
+		ambientTemp = data["ambientTemp"];
+		alfa = data["alfa"];
+		specificHeat = data["specificHeat"];
+		conductivity = data["conductivity"];
+		density = data["density"];
+
+		/*plik >> H; // wysokoœæ
 			plik >> L; //d³ugoœæ
 			plik >> nH; // liczba wêz³ów po wysokoœci
 			plik >> nL; // liczba wêz³ów po d³ugoœci
 		
-			initialTemp = 100;
-			simulationTime = 500;
-			simulationStepTime = 50;
+			initialTemp = 100;	
+			simulationTime = 300;
+			simulationStepTime = 5;
 			ambientTemp = 1200;
 			alfa = 300; 
 			specificHeat = 700;
 			conductivity = 25;
 			density=7800;
-
+			*/
 
 		int nodesCount = nH*nL;
 		int elementsCount = (nH - 1)*(nL - 1);
